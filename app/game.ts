@@ -14,7 +14,7 @@ module Bowling
             var prev = null;
             for (var i = 0; i < 10; i++)
             {
-                this.frames[i] = new Frame(i, prev);
+                this.frames[i] = i < 9 ? new Frame(prev) : new Frame10(prev);
                 prev = this.frames[i];
             }
 

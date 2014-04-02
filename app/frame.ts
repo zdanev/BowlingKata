@@ -6,14 +6,12 @@ module Bowling
     {
         pins: number[];
         bonus: number;
-        index: number;
         prev: Frame;
 
-        constructor(index: number, prev: Frame)
+        constructor(prev: Frame)
         {
             this.pins = new Array<number>();
             this.bonus = 0;
-            this.index = index;
             this.prev = prev;
         }
 
@@ -29,7 +27,7 @@ module Bowling
 
         applyBonuses(n: number)
         {
-            if (this.index > 0)
+            if (this.prev != null)
             {
                 if (this.pins.length == 0 && (this.prev.isSpare() || this.prev.isStrike()))
                     this.prev.bonus += n;
@@ -38,7 +36,7 @@ module Bowling
                     this.prev.bonus += n;
             }
 
-            if (this.index > 1)
+            if (this.prev != null && this.prev.prev != null)
             {
                 if (this.pins.length == 0 && this.prev.isStrike() && this.prev.prev.isStrike())
                     this.prev.prev.bonus += n;
@@ -57,21 +55,7 @@ module Bowling
 
         isComplete(): boolean
         {
-            if (this.index == 9)
-            {
-                if (this.isStrike() || this.isSpare())
-                {
-                    return this.pins.length == 3;
-                }
-                else
-                {
-                    return this.pins.length == 2;
-                }
-            }
-            else
-            {
-                return this.isStrike() || this.pins.length == 2;
-            }
+            return this.isStrike() || this.pins.length == 2;
         }
 
         value(): number
@@ -87,4 +71,19 @@ module Bowling
             return result;
         }
     }
-} 
+
+    export class Frame10 extends Frame
+    {
+        isComplete(): boolean
+        {
+            if (this.isStrike() || this.isSpare())
+            {
+                return this.pins.length == 3;
+            }
+            else
+            {
+                return this.pins.length == 2;
+            }
+        }
+    }
+}
